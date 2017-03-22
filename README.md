@@ -14,7 +14,11 @@ Test application that logs to a dockerised ELK stack. Uses:
 
 1. Build war: `mvn install`
 2. Build docker image: `docker build --tag web .`
-3. Run web app: `docker run -p 80:9080 -p 443:9443 --name web --log-driver=syslog --log-opt syslog-address=tcp://127.0.0.1:5000 --log-opt tag=logger-test web`
+3. Run web app: `docker-compose up -d`
+
+If you'd like to see what's being logged out of the app container you can run this command instead:
+
+`docker run -p 80:9080 -p 443:9443 --name web --log-driver=syslog --log-opt syslog-address=tcp://127.0.0.1:5000 --log-opt tag=logger-test web`
 
 ## Verify
 
@@ -24,6 +28,7 @@ Test application that logs to a dockerised ELK stack. Uses:
 4. Go to `http://localhost/websphere_elk_test`
 5. View logged test message via Dev Tools: 
 
+```
 	GET _search
 	{
 	  "query": {
@@ -33,4 +38,4 @@ Test application that logs to a dockerised ELK stack. Uses:
 	    {"@timestamp" : {"order" : "desc"}}
 	  ]
 	}
-
+```
