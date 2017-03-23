@@ -4,11 +4,10 @@ Test application that logs to a dockerised ELK stack. Uses:
 - log4j output in JSON format
 - Docker log-driver mechanism (via syslog) to update logstash
 
-## ELK Stack
+## Splunk Stack
 
-1. `git clone https://github.com/deviantony/docker-elk`
-2. `cd docker-elk`
-3. `docker-compose up -d`
+1. `docker pull splunk/splunk:latest`
+2. `docker run -d -e SPLUNK_START_ARGS=--accept-license -e SPLUNK_USER=root -p 8000:8000 -p 8088:8088 splunk/splunk`
 
 ## Test App
 
@@ -16,26 +15,11 @@ Test application that logs to a dockerised ELK stack. Uses:
 2. Build docker image: `docker build --tag web .`
 3. Run web app: `docker-compose up -d`
 
-If you'd like to see what's being logged out of the app container you can run this command instead:
-
-`docker run -p 80:9080 -p 443:9443 --name web --log-driver=syslog --log-opt syslog-address=tcp://127.0.0.1:5000 --log-opt tag=logger-test web`
-
 ## Verify
 
-1. Open `http://localhost:5601`
-2. Create default index patterns
-3. View start up logs via Dev Tools: `GET _search`
-4. Go to `http://localhost/websphere_elk_test`
-5. View logged test message via Dev Tools: 
-
-```
-	GET _search
-	{
-	  "query": {
-	    "match_all": {}
-	  },
-	  "sort": [
-	    {"@timestamp" : {"order" : "desc"}}
-	  ]
-	}
-```
+1. Open `http://localhost/websphere_elk_test`
+2. Open `http://localhost:8000` and sign-in
+3. Navigate to Search & Reporting
+4. Click on the Data Summary button
+5. Click on the `moby` link
+6. Verify `This is a test message` has been captured
