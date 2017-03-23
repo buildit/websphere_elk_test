@@ -10,7 +10,9 @@ services:
       - "80:9080"
       - "443:9443"
     logging:
-      driver: syslog
+      driver: splunk
       options:
-        syslog-address: tcp://127.0.0.1:5000
+        splunk-url: https://127.0.0.1:8088
+        splunk-token: 00000000-0000-0000-0000-000000000000
         tag: "logger-test"
+        splunk-insecureskipverify: "true"
